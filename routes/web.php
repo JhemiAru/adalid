@@ -15,3 +15,8 @@ Route::get('/productos/create', [ProductoController::class, 'create']);
 
 // 🔥 GUARDAR PRODUCTO
 Route::post('/productos', [ProductoController::class, 'store']);
+
+
+Route::get('/catalogo', function () {
+    return view('catalogo');
+});
