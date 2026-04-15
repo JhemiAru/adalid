@@ -16,7 +16,7 @@ class Producto extends Model
         'imagen'
     ];
 
-    // 🔗 RELACIÓN CON CATEGORÍA
+
     public function categoria()
     {
         return $this->belongsTo(Categoria::class);
