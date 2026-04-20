@@ -21,22 +21,6 @@ body {
     padding: 20px;
 }
 
-.sidebar h2 {
-    font-size: 20px;
-    margin-bottom: 20px;
-}
-
-.sidebar li {
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 5px;
-    transition: 0.3s;
-}
-
-.sidebar li:hover {
-    background: #1e293b;
-}
-
 /* MAIN */
 .main {
     margin-left: 250px;
@@ -58,16 +42,15 @@ body {
     border-radius: 8px;
     border: none;
     cursor: pointer;
-    transition: 0.3s;
 }
 
 .btn:hover {
     background: #1e293b;
 }
 
-/* FILTRO */
+/* FILTROS */
 .filtros {
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .filtros button {
@@ -89,9 +72,9 @@ body {
     font-weight: bold;
 }
 
-.blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-.green { background: linear-gradient(135deg, #22c55e, #16a34a); }
-.red { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.blue { background: #3b82f6; }
+.green { background: #22c55e; }
+.red { background: #ef4444; }
 
 /* TABLA */
 .table-container {
@@ -99,7 +82,6 @@ body {
     background: white;
     padding: 20px;
     border-radius: 15px;
-    box-shadow: 0px 6px 15px rgba(0,0,0,0.08);
 }
 
 table {
@@ -121,38 +103,84 @@ tr:hover {
     background: #f1f5f9;
 }
 
-/* IMÁGENES */
-img {
+/* DETALLE PRO */
+.detalle-card {
+    display: flex;
+    gap: 30px;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0px 8px 20px rgba(0,0,0,0.1);
+    flex-wrap: wrap;
+}
+
+.detalle-img img {
+    width: 180px;
     border-radius: 12px;
-    transition: 0.3s;
 }
 
-img:hover {
-    transform: scale(1.05);
+.detalle-info {
+    flex: 1;
 }
 
-/* BOTONES ACCIONES */
+/* FILAS */
+.fila {
+    display: flex;
+    gap: 30px;
+    margin: 10px 0;
+}
+
+.item {
+    flex: 1;
+}
+
+.item label {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.item span {
+    display: block;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* INPUTS */
+.item input,
+.item textarea,
+.item select {
+    width: 100%;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+}
+
+/* BOTONES */
+.acciones {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
 .edit {
-    background: #f59e0b;
+    background: orange;
     color: white;
     border: none;
-    padding: 6px 10px;
+    padding: 8px 12px;
     border-radius: 6px;
 }
 
 .delete {
-    background: #ef4444;
+    background: red;
     color: white;
     border: none;
-    padding: 6px 10px;
+    padding: 8px 12px;
     border-radius: 6px;
 }
 
-/* DETALLE */
-.detalle {
-    display: flex;
-    gap: 25px;
-    padding: 20px;
+.edit:hover, .delete:hover {
+    transform: scale(1.05);
+    cursor: pointer;
 }
 </style>
 </head>
@@ -161,11 +189,6 @@ img:hover {
 
 <div class="sidebar">
     <h2>📦 INVENTARIO</h2>
-    <ul>
-        <li>Dashboard</li>
-        <li>Productos</li>
-        <li>Inventario</li>
-    </ul>
 </div>
 
 <div class="main">
@@ -178,35 +201,24 @@ img:hover {
     </a>
 </div>
 
-<!-- FILTRO -->
+<!-- FILTROS -->
 <div class="filtros">
-    <strong>Categorías:</strong>
+<strong>Categorías:</strong>
 
-    <a href="/productos"><button class="btn">Todos</button></a>
+<a href="/productos"><button class="btn">Todos</button></a>
 
-    @foreach($categorias as $cat)
-        <a href="/productos?categoria_id={{ $cat->id }}">
-            <button class="btn">{{ $cat->nombre }}</button>
-        </a>
-    @endforeach
+@foreach($categorias as $cat)
+<a href="/productos?categoria_id={{ $cat->id }}">
+    <button class="btn">{{ $cat->nombre }}</button>
+</a>
+@endforeach
 </div>
 
 <!-- CARDS -->
 <div class="cards">
-    <div class="card blue">
-        Total Productos <br>
-        {{ $productos->count() }}
-    </div>
-
-    <div class="card green">
-        Stock Total <br>
-        {{ $productos->sum('stock') }}
-    </div>
-
-    <div class="card red">
-        Inventario <br>
-        --
-    </div>
+    <div class="card blue">Total Productos: {{ $productos->count() }}</div>
+    <div class="card green">Stock Total: {{ $productos->sum('stock') }}</div>
+    <div class="card red">Inventario</div>
 </div>
 
 <!-- TABLA -->
@@ -215,11 +227,11 @@ img:hover {
 
 <thead>
 <tr>
-    <th>ID</th>
-    <th>Imagen</th>
-    <th>Producto</th>
-    <th>Stock</th>
-    <th>Ver</th>
+<th>ID</th>
+<th>Imagen</th>
+<th>Producto</th>
+<th>Stock</th>
+<th>Ver</th>
 </tr>
 </thead>
 
@@ -228,51 +240,81 @@ img:hover {
 @foreach($productos as $producto)
 
 <tr onclick="toggleDetalle({{ $producto->id }})" style="cursor:pointer;">
-    <td>{{ $producto->id }}</td>
-
-    <td>
-        <img src="/imagenes/{{ $producto->imagen ?? 'default.png' }}" width="55">
-    </td>
-
-    <td>{{ $producto->nombre }}</td>
-
-    <td>{{ $producto->stock }}</td>
-
-    <td>👁</td>
+<td>{{ $producto->id }}</td>
+<td><img src="/imagenes/{{ $producto->imagen ?? 'default.png' }}" width="50"></td>
+<td>{{ $producto->nombre }}</td>
+<td>{{ $producto->stock }}</td>
+<td>👁</td>
 </tr>
 
 <tr id="detalle-{{ $producto->id }}" style="display:none;">
 <td colspan="5">
 
-<div class="detalle">
+<div class="detalle-card">
 
-<div>
-    <img src="/imagenes/{{ $producto->imagen ?? 'default.png' }}" width="180">
+<div class="detalle-img">
+<img src="/imagenes/{{ $producto->imagen ?? 'default.png' }}">
 </div>
 
-<div>
+<div class="detalle-info">
 
-<h3>{{ $producto->nombre }}</h3>
+<h2>{{ $producto->nombre }}</h2>
 
-<p><strong>Descripción:</strong><br>
-{{ $producto->descripcion }}</p>
+<!-- FORM EDITAR -->
+<form action="/productos/{{ $producto->id }}" method="POST">
+@csrf
+@method('PUT')
 
-<p><strong>Categoría:</strong> 
-{{ $producto->categoria->nombre ?? 'Sin categoría' }}</p>
+<div class="fila">
 
-<p><strong>Stock:</strong> {{ $producto->stock }}</p>
+<div class="item">
+<label>Stock</label>
+<span id="text-stock-{{ $producto->id }}">{{ $producto->stock }}</span>
+<input type="number" name="stock" value="{{ $producto->stock }}" id="input-stock-{{ $producto->id }}" style="display:none;">
+</div>
 
-<br>
+<div class="item">
+<label>Categoría</label>
+<span id="text-cat-{{ $producto->id }}">{{ $producto->categoria->nombre ?? 'Sin categoría' }}</span>
 
-<a href="/productos/{{ $producto->id }}/edit">
-    <button class="edit">Editar</button>
-</a>
+<select name="categoria_id" id="input-cat-{{ $producto->id }}" style="display:none;">
+@foreach($categorias as $cat)
+<option value="{{ $cat->id }}" {{ $producto->categoria_id == $cat->id ? 'selected' : '' }}>
+{{ $cat->nombre }}
+</option>
+@endforeach
+</select>
+</div>
 
-<form action="/productos/{{ $producto->id }}" method="POST" style="display:inline;">
-    @csrf
-    @method('DELETE')
-    <button class="delete">Eliminar</button>
+</div>
+
+<div class="fila">
+<div class="item" style="flex:100%;">
+<label>Descripción</label>
+<span id="text-desc-{{ $producto->id }}">{{ $producto->descripcion }}</span>
+<textarea name="descripcion" id="input-desc-{{ $producto->id }}" style="display:none;">{{ $producto->descripcion }}</textarea>
+</div>
+</div>
+
+<div class="acciones">
+
+<button type="button" class="edit" onclick="activarEdicion({{ $producto->id }})">
+Editar
+</button>
+
+<button type="submit" class="edit" id="btn-guardar-{{ $producto->id }}" style="display:none;">
+Actualizar
+</button>
+
 </form>
+
+<form action="/productos/{{ $producto->id }}" method="POST" onsubmit="return confirm('¿Eliminar producto?')">
+@csrf
+@method('DELETE')
+<button class="delete">Eliminar</button>
+</form>
+
+</div>
 
 </div>
 
@@ -292,8 +334,19 @@ img:hover {
 <script>
 function toggleDetalle(id) {
     let fila = document.getElementById('detalle-' + id);
-
     fila.style.display = (fila.style.display === 'none') ? 'table-row' : 'none';
+}
+
+function activarEdicion(id) {
+    document.getElementById('text-stock-' + id).style.display = 'none';
+    document.getElementById('text-cat-' + id).style.display = 'none';
+    document.getElementById('text-desc-' + id).style.display = 'none';
+
+    document.getElementById('input-stock-' + id).style.display = 'block';
+    document.getElementById('input-cat-' + id).style.display = 'block';
+    document.getElementById('input-desc-' + id).style.display = 'block';
+
+    document.getElementById('btn-guardar-' + id).style.display = 'inline-block';
 }
 </script>
 

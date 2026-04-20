@@ -34,4 +34,31 @@ public function store(Request $request)
     Producto::create($request->all());
     return redirect('/productos');
 }
+
+// 🔹 FORMULARIO EDITAR
+public function edit($id)
+{
+    $producto = Producto::findOrFail($id);
+    $categorias = Categoria::all();
+
+    return view('productos.edit', compact('producto','categorias'));
+}
+
+// 🔹 ACTUALIZAR
+public function update(Request $request, $id)
+{
+    $producto = Producto::findOrFail($id);
+    $producto->update($request->all());
+
+    return redirect('/productos');
+}
+
+// 🔹 ELIMINAR
+public function destroy($id)
+{
+    $producto = Producto::findOrFail($id);
+    $producto->delete();
+
+    return redirect('/productos');
+}
 }
