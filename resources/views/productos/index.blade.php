@@ -16,8 +16,8 @@ body {
     width: 230px;
     height: 100vh;
     position: fixed;
-    background: #020617;
-    color: #e2e8f0;
+    background: #0f172a;
+    color: #ffffff;
     padding: 20px;
 }
 
@@ -188,7 +188,7 @@ tr:hover {
 <body>
 
 <div class="sidebar">
-    <h2>📦 INVENTARIO</h2>
+    <h2> INVENTARIO</h2>
 </div>
 
 <div class="main">
