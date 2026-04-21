@@ -31,10 +31,18 @@ class ProductoController extends Controller
 
 public function store(Request $request)
 {
+    $request->validate([
+        'codigo' => 'required',
+        'nombre' => 'required',
+        'stock' => 'required|integer|min:0',
+        'precio' => 'required|numeric|min:0',
+        'categoria_id' => 'required'
+    ]);
+
     Producto::create($request->all());
+
     return redirect('/productos');
 }
-
 // 🔹 FORMULARIO EDITAR
 public function edit($id)
 {
@@ -47,6 +55,12 @@ public function edit($id)
 // 🔹 ACTUALIZAR
 public function update(Request $request, $id)
 {
+    $request->validate([
+        'stock' => 'required|integer|min:0',
+        'precio' => 'required|numeric|min:0',
+        'categoria_id' => 'required'
+    ]);
+
     $producto = Producto::findOrFail($id);
     $producto->update($request->all());
 

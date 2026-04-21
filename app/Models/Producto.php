@@ -8,13 +8,14 @@ use App\Models\Categoria;
 class Producto extends Model
 {
     protected $fillable = [
-        'codigo',
-        'nombre',
-        'descripcion',
-        'stock',
-        'categoria_id',
-        'imagen'
-    ];
+    'codigo',
+    'nombre',
+    'descripcion',
+    'stock',
+    'precio',
+    'categoria_id',
+    'imagen'
+];
 
  
     
