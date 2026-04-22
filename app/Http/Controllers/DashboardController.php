@@ -46,4 +46,18 @@ class DashboardController extends Controller
 
         return response()->json($egreso);
     }
+
+    //resumen
+    public function resumen()
+{
+    $ingresos = Ingreso::sum('monto');
+    $egresos = Egreso::sum('monto');
+
+    return response()->json([
+        'ingresos' => $ingresos,
+        'egresos' => $egresos,
+        'caja' => $ingresos - $egresos
+    ]);
+}
+
 }

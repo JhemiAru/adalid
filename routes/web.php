@@ -11,3 +11,4 @@ Route::get('/productos', [DashboardController::class, 'obtenerProductos']);
 Route::post('/productos', [DashboardController::class, 'guardarProducto']);
 Route::post('/ingresos', [DashboardController::class, 'guardarIngreso']);
 Route::post('/egresos', [DashboardController::class, 'guardarEgreso']);
+Route::get('/resumen', [DashboardController::class, 'resumen']);
