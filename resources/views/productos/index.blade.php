@@ -677,7 +677,9 @@ tr.fila-detalle td{padding:0;}
 
                                 <div class="detalle-nombre">{{ $producto->nombre }}</div>
 
-                                <form action="/productos/{{ $producto->id }}" method="POST">
+                                {{-- FORM EDICIÓN --}}
+                                <form action="/productos/{{ $producto->id }}" method="POST"
+                                      id="form-editar-{{ $producto->id }}">
                                 @csrf
                                 @method('PUT')
 
@@ -686,11 +688,8 @@ tr.fila-detalle td{padding:0;}
 
                                     <div class="detalle-field">
                                         <label>Stock</label>
-                                        <div class="field-display" id="text-stock-{{ $producto->id }}">
-                                            {{ $producto->stock }} uds
-                                        </div>
-                                        <input class="field-input"
-                                               type="number" name="stock" min="0"
+                                        <div class="field-display" id="text-stock-{{ $producto->id }}">{{ $producto->stock }} uds</div>
+                                        <input class="field-input" type="number" name="stock" min="0"
                                                value="{{ $producto->stock }}"
                                                id="input-stock-{{ $producto->id }}"
                                                style="display:none;">
@@ -698,11 +697,8 @@ tr.fila-detalle td{padding:0;}
 
                                     <div class="detalle-field">
                                         <label>Precio</label>
-                                        <div class="field-display" id="text-precio-{{ $producto->id }}">
-                                            {{ number_format($producto->precio, 2) }} Bs
-                                        </div>
-                                        <input class="field-input"
-                                               type="number" name="precio" min="0" step="0.01"
+                                        <div class="field-display" id="text-precio-{{ $producto->id }}">{{ number_format($producto->precio, 2) }} Bs</div>
+                                        <input class="field-input" type="number" name="precio" min="0" step="0.01"
                                                value="{{ $producto->precio }}"
                                                id="input-precio-{{ $producto->id }}"
                                                style="display:none;">
@@ -710,16 +706,12 @@ tr.fila-detalle td{padding:0;}
 
                                     <div class="detalle-field">
                                         <label>Categoría</label>
-                                        <div class="field-display" id="text-cat-{{ $producto->id }}">
-                                            {{ $producto->categoria->nombre ?? 'Sin categoría' }}
-                                        </div>
-                                        <select class="field-select"
-                                                name="categoria_id"
+                                        <div class="field-display" id="text-cat-{{ $producto->id }}">{{ $producto->categoria->nombre ?? 'Sin categoría' }}</div>
+                                        <select class="field-select" name="categoria_id"
                                                 id="input-cat-{{ $producto->id }}"
                                                 style="display:none;">
                                             @foreach($categorias as $cat)
-                                            <option value="{{ $cat->id }}"
-                                                {{ $producto->categoria_id == $cat->id ? 'selected' : '' }}>
+                                            <option value="{{ $cat->id }}" {{ $producto->categoria_id == $cat->id ? 'selected' : '' }}>
                                                 {{ $cat->nombre }}
                                             </option>
                                             @endforeach
@@ -731,75 +723,78 @@ tr.fila-detalle td{padding:0;}
                                 <!-- Descripción -->
                                 <div class="detalle-desc">
                                     <label>Descripción</label>
-                                    <div class="desc-display" id="text-desc-{{ $producto->id }}">
-                                        {{ $producto->descripcion ?? '—' }}
-                                    </div>
-                                    <textarea class="field-textarea"
-                                              name="descripcion" rows="3"
+                                    <div class="desc-display" id="text-desc-{{ $producto->id }}">{{ $producto->descripcion ?? '—' }}</div>
+                                    <textarea class="field-textarea" name="descripcion" rows="3"
                                               id="input-desc-{{ $producto->id }}"
                                               style="display:none;">{{ $producto->descripcion }}</textarea>
                                 </div>
 
+                                </form>
+                                {{-- FIN FORM EDICIÓN --}}
+
+                                {{-- FORM CONTADOR --}}
+                                <form action="/productos/{{ $producto->id }}" method="POST"
+                                      id="form-contador-{{ $producto->id }}">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="hidden" name="stock" id="hidden-stock-{{ $producto->id }}" value="{{ $producto->stock }}">
+                                    <input type="hidden" name="precio" value="{{ $producto->precio }}">
+                                    <input type="hidden" name="categoria_id" value="{{ $producto->categoria_id }}">
+                                    <input type="hidden" name="descripcion" value="{{ $producto->descripcion }}">
+                                </form>
+
+                                {{-- FORM ELIMINAR --}}
+                                <form action="/productos/{{ $producto->id }}" method="POST"
+                                      id="form-eliminar-{{ $producto->id }}"
+                                      onsubmit="return confirm('¿Seguro que deseas eliminar este producto?')">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+
                                 <!-- Contador rápido de stock -->
-                                <div class="stock-counter" id="contador-{{ $producto->id }}">
+                                <div class="stock-counter">
                                     <button type="button" class="counter-btn minus"
                                             onclick="cambiarStock({{ $producto->id }}, -1)">−</button>
                                     <span class="counter-display" id="contador-val-{{ $producto->id }}">{{ $producto->stock }}</span>
                                     <button type="button" class="counter-btn plus"
                                             onclick="cambiarStock({{ $producto->id }}, 1)">+</button>
-                                    <form action="/productos/{{ $producto->id }}" method="POST"
-                                          id="form-contador-{{ $producto->id }}" style="display:inline;">
-                                        @csrf
-                                        @method('PUT')
-                                        <input type="hidden" name="stock" id="hidden-stock-{{ $producto->id }}" value="{{ $producto->stock }}">
-                                        <input type="hidden" name="precio" value="{{ $producto->precio }}">
-                                        <input type="hidden" name="categoria_id" value="{{ $producto->categoria_id }}">
-                                        <input type="hidden" name="descripcion" value="{{ $producto->descripcion }}">
-                                        <button type="submit" class="btn-accion btn-save" style="padding:6px 12px;font-size:12px;">
-                                            Aplicar
-                                        </button>
-                                    </form>
+                                    <button type="button" class="btn-accion btn-save"
+                                            style="padding:6px 12px;font-size:12px;"
+                                            onclick="submitContador({{ $producto->id }})">
+                                        Aplicar
+                                    </button>
                                 </div>
 
                                 <!-- Acciones -->
                                 <div class="detalle-acciones">
 
-                                    <button type="button"
-                                            class="btn-accion btn-edit"
+                                    <button type="button" class="btn-accion btn-edit"
                                             id="btn-editar-{{ $producto->id }}"
                                             onclick="activarEdicion({{ $producto->id }})">
                                         Editar
                                     </button>
 
-                                    <button type="submit"
-                                            class="btn-accion btn-save"
+                                    <button type="button" class="btn-accion btn-save"
                                             id="btn-guardar-{{ $producto->id }}"
-                                            style="display:none;">
+                                            style="display:none;"
+                                            onclick="document.getElementById('form-editar-{{ $producto->id }}').submit()">
                                         Guardar cambios
                                     </button>
 
-                                    <button type="button"
-                                            class="btn-accion btn-cancel"
+                                    <button type="button" class="btn-accion btn-cancel"
                                             id="btn-cancelar-{{ $producto->id }}"
                                             style="display:none;"
                                             onclick="cancelarEdicion({{ $producto->id }})">
                                         Cancelar
                                     </button>
 
-                                </form>
-
-                                <form action="/productos/{{ $producto->id }}" method="POST"
-                                      onsubmit="return confirm('¿Seguro que deseas eliminar este producto?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn-accion btn-delete"
-                                            id="btn-eliminar-{{ $producto->id }}">
+                                    <button type="button" class="btn-accion btn-delete"
+                                            id="btn-eliminar-{{ $producto->id }}"
+                                            onclick="document.getElementById('form-eliminar-{{ $producto->id }}').submit()">
                                         Eliminar
                                     </button>
-                                </form>
 
-                                    <button type="button"
-                                            class="btn-accion"
+                                    <button type="button" class="btn-accion"
                                             onclick="cerrarDetalle({{ $producto->id }})">
                                         Cerrar
                                     </button>
@@ -829,6 +824,10 @@ function cambiarStock(id, delta){
     if(val < 0) val = 0;
     display.textContent = val;
     hidden.value = val;
+}
+
+function submitContador(id){
+    document.getElementById('form-contador-' + id).submit();
 }
 
 function toggleDetalle(id){
