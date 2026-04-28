@@ -179,7 +179,7 @@ body{
 /* ── MÉTRICAS ── */
 .metrics{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(4,1fr);
     gap:14px;
     margin-bottom:24px;
 }
@@ -224,6 +224,14 @@ body{
 .badge-green{background:var(--green-bg);color:var(--green-text);}
 .badge-amber{background:var(--amber-bg);color:var(--amber-text);}
 .badge-red{background:var(--red-bg);color:var(--red-text);}
+
+/* ── CONTADOR +/- ── */
+.stock-counter{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.counter-btn{width:32px;height:32px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,border-color .15s;font-family:'DM Sans',sans-serif;font-weight:400;flex-shrink:0;}
+.counter-btn:hover{background:var(--surface2);border-color:#94a3b8;}
+.counter-btn.plus:hover{border-color:#86efac;background:var(--green-bg);color:var(--green-text);}
+.counter-btn.minus:hover{border-color:var(--red-border);background:var(--red-bg);color:var(--red-text);}
+.counter-display{font-size:20px;font-weight:600;color:var(--text);min-width:36px;text-align:center;font-family:'DM Mono',monospace;}
 
 /* ── TABLA SECTION ── */
 .section{
@@ -407,7 +415,7 @@ tr.fila-detalle td{padding:0;}
 
 .detalle-grid{
     display:grid;
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(4,1fr);
     gap:16px;
     margin-bottom:16px;
 }
@@ -575,9 +583,14 @@ tr.fila-detalle td{padding:0;}
             <span class="badge badge-green">unidades</span>
         </div>
         <div class="metric">
+            <div class="metric-label">Poco stock</div>
+            <div class="metric-value">{{ $productos->filter(fn($p) => $p->stock > 0 && $p->stock <= 10)->count() }}</div>
+            <span class="badge badge-amber">≤ 10 unidades</span>
+        </div>
+        <div class="metric">
             <div class="metric-label">Sin stock</div>
             <div class="metric-value">{{ $productos->where('stock', 0)->count() }}</div>
-            <span class="badge badge-amber">requieren atención</span>
+            <span class="badge badge-red">sin unidades</span>
         </div>
     </div>
 
@@ -727,6 +740,27 @@ tr.fila-detalle td{padding:0;}
                                               style="display:none;">{{ $producto->descripcion }}</textarea>
                                 </div>
 
+                                <!-- Contador rápido de stock -->
+                                <div class="stock-counter" id="contador-{{ $producto->id }}">
+                                    <button type="button" class="counter-btn minus"
+                                            onclick="cambiarStock({{ $producto->id }}, -1)">−</button>
+                                    <span class="counter-display" id="contador-val-{{ $producto->id }}">{{ $producto->stock }}</span>
+                                    <button type="button" class="counter-btn plus"
+                                            onclick="cambiarStock({{ $producto->id }}, 1)">+</button>
+                                    <form action="/productos/{{ $producto->id }}" method="POST"
+                                          id="form-contador-{{ $producto->id }}" style="display:inline;">
+                                        @csrf
+                                        @method('PUT')
+                                        <input type="hidden" name="stock" id="hidden-stock-{{ $producto->id }}" value="{{ $producto->stock }}">
+                                        <input type="hidden" name="precio" value="{{ $producto->precio }}">
+                                        <input type="hidden" name="categoria_id" value="{{ $producto->categoria_id }}">
+                                        <input type="hidden" name="descripcion" value="{{ $producto->descripcion }}">
+                                        <button type="submit" class="btn-accion btn-save" style="padding:6px 12px;font-size:12px;">
+                                            Aplicar
+                                        </button>
+                                    </form>
+                                </div>
+
                                 <!-- Acciones -->
                                 <div class="detalle-acciones">
 
@@ -788,6 +822,15 @@ tr.fila-detalle td{padding:0;}
 </div><!-- /main -->
 
 <script>
+function cambiarStock(id, delta){
+    const display = document.getElementById('contador-val-' + id);
+    const hidden  = document.getElementById('hidden-stock-' + id);
+    let val = parseInt(display.textContent) + delta;
+    if(val < 0) val = 0;
+    display.textContent = val;
+    hidden.value = val;
+}
+
 function toggleDetalle(id){
     const detalle = document.getElementById('detalle-' + id);
     const fila    = document.getElementById('fila-' + id);
