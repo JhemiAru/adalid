@@ -2,470 +2,838 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Catálogo Maestro</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
+*{box-sizing:border-box;margin:0;padding:0;}
+
+:root{
+    --bg:#f8fafc;
+    --surface:#ffffff;
+    --surface2:#f1f5f9;
+    --border:#e2e8f0;
+    --text:#0f172a;
+    --muted:#64748b;
+    --hint:#94a3b8;
+    --dark:#0f172a;
+    --dark2:#1e293b;
+    --blue:#2563eb;
+    --blue-bg:#eff6ff;
+    --blue-text:#1d4ed8;
+    --green:#16a34a;
+    --green-bg:#f0fdf4;
+    --green-text:#15803d;
+    --amber-bg:#fffbeb;
+    --amber-text:#b45309;
+    --amber-border:#fcd34d;
+    --red-bg:#fef2f2;
+    --red-text:#dc2626;
+    --red-border:#fca5a5;
+    --radius:8px;
+    --radius-lg:12px;
+    --radius-xl:16px;
+    --shadow:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+    --shadow-md:0 4px 12px rgba(0,0,0,.08);
+}
+
 body{
-    margin:0;
-    font-family:'Segoe UI',sans-serif;
-    background:#f1f5f9;
+    font-family:'DM Sans',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    display:flex;
 }
 
-/* SIDEBAR */
+/* ── SIDEBAR ── */
 .sidebar{
-    width:230px;
-    height:100vh;
+    width:240px;
+    min-height:100vh;
     position:fixed;
-    background:#0f172a;
-    color:white;
-    padding:20px;
+    top:0;left:0;
+    background:var(--dark);
+    display:flex;
+    flex-direction:column;
+    padding:0;
+    z-index:100;
 }
 
-/* MAIN */
+.sidebar-brand{
+    padding:24px 20px 20px;
+    border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.sidebar-brand .label{
+    font-size:10px;
+    font-weight:600;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:#475569;
+    margin-bottom:4px;
+}
+
+.sidebar-brand .title{
+    font-size:18px;
+    font-weight:600;
+    color:#ffffff;
+}
+
+.sidebar-nav{
+    padding:16px 12px;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+}
+
+.nav-section-label{
+    font-size:10px;
+    font-weight:600;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:#334155;
+    padding:10px 8px 6px;
+}
+
+.nav-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:9px 10px;
+    border-radius:var(--radius);
+    color:#94a3b8;
+    font-size:13.5px;
+    font-weight:500;
+    cursor:pointer;
+    text-decoration:none;
+    transition:background .15s,color .15s;
+}
+
+.nav-item:hover{background:rgba(255,255,255,.06);color:#e2e8f0;}
+
+.nav-item.active{
+    background:rgba(37,99,235,.18);
+    color:#93c5fd;
+}
+
+.nav-icon{
+    width:16px;height:16px;
+    opacity:.7;
+    flex-shrink:0;
+}
+
+.nav-item.active .nav-icon{opacity:1;}
+
+/* ── MAIN ── */
 .main{
-    margin-left:250px;
-    padding:25px;
+    margin-left:240px;
+    flex:1;
+    padding:32px 28px;
+    min-height:100vh;
 }
 
-/* HEADER */
-.header{
+/* ── TOPBAR ── */
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:24px;
+    gap:16px;
+    flex-wrap:wrap;
+}
+
+.topbar-left h1{
+    font-size:22px;
+    font-weight:600;
+    color:var(--text);
+    letter-spacing:-.02em;
+}
+
+.topbar-left p{
+    font-size:13px;
+    color:var(--muted);
+    margin-top:3px;
+}
+
+.btn-primary{
+    background:var(--dark);
+    color:#fff;
+    border:none;
+    padding:9px 18px;
+    border-radius:var(--radius);
+    font-size:13.5px;
+    font-family:'DM Sans',sans-serif;
+    font-weight:500;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    transition:background .15s,transform .1s;
+    text-decoration:none;
+}
+
+.btn-primary:hover{background:var(--dark2);transform:translateY(-1px);}
+.btn-primary:active{transform:scale(.98);}
+
+/* ── MÉTRICAS ── */
+.metrics{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin-bottom:24px;
+}
+
+.metric{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-lg);
+    padding:18px 20px;
+    box-shadow:var(--shadow);
+}
+
+.metric-label{
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:10px;
+}
+
+.metric-value{
+    font-size:28px;
+    font-weight:600;
+    color:var(--text);
+    letter-spacing:-.03em;
+    line-height:1;
+    margin-bottom:8px;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    padding:3px 9px;
+    border-radius:20px;
+    font-size:11.5px;
+    font-weight:500;
+}
+
+.badge-blue{background:var(--blue-bg);color:var(--blue-text);}
+.badge-green{background:var(--green-bg);color:var(--green-text);}
+.badge-amber{background:var(--amber-bg);color:var(--amber-text);}
+.badge-red{background:var(--red-bg);color:var(--red-text);}
+
+/* ── TABLA SECTION ── */
+.section{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-xl);
+    overflow:hidden;
+    box-shadow:var(--shadow);
+}
+
+.section-header{
+    padding:16px 20px;
+    border-bottom:1px solid var(--border);
     display:flex;
     justify-content:space-between;
     align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
 }
 
-/* BOTONES */
-.btn{
-    background:#0f172a;
-    color:white;
-    padding:8px 14px;
-    border:none;
-    border-radius:8px;
-    cursor:pointer;
+.section-title{
+    font-size:14.5px;
+    font-weight:600;
+    color:var(--text);
 }
 
-.btn:hover{
-    background:#1e293b;
-}
-
-/* FILTROS */
-.filtros{
-    margin-top:15px;
-}
-
-.filtros button{
-    margin:4px;
-}
-
-/* CARDS */
-.cards{
+.filters{
     display:flex;
-    gap:15px;
-    margin-top:20px;
+    gap:6px;
+    flex-wrap:wrap;
+    align-items:center;
 }
 
-.card{
-    flex:1;
-    padding:18px;
-    border-radius:12px;
-    color:white;
-    font-weight:bold;
+.filter-btn{
+    background:transparent;
+    border:1px solid var(--border);
+    color:var(--muted);
+    padding:5px 14px;
+    border-radius:20px;
+    font-size:12.5px;
+    font-family:'DM Sans',sans-serif;
+    cursor:pointer;
+    transition:all .15s;
+    text-decoration:none;
+    display:inline-block;
 }
 
-.blue{background:#3b82f6;}
-.green{background:#22c55e;}
-.red{background:#ef4444;}
+.filter-btn:hover{border-color:#94a3b8;color:var(--text);}
+.filter-btn.active{background:var(--dark);color:#fff;border-color:var(--dark);}
 
-/* TABLA */
-.table-container{
-    margin-top:25px;
-    background:white;
-    padding:20px;
-    border-radius:15px;
+/* ── TABLA ── */
+.table-wrap{overflow-x:auto;}
+
+table{width:100%;border-collapse:collapse;}
+
+thead th{
+    padding:11px 16px;
+    text-align:left;
+    font-size:11px;
+    font-weight:600;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+    color:var(--muted);
+    border-bottom:1px solid var(--border);
+    white-space:nowrap;
 }
 
-table{
-    width:100%;
-    border-collapse:collapse;
+th.th-center,td.td-center{text-align:center;}
+
+tbody tr.fila-producto{
+    cursor:pointer;
+    transition:background .1s;
 }
 
-th{
-    background:#0f172a;
-    color:white;
-    padding:12px;
-}
+tbody tr.fila-producto:hover{background:var(--surface2);}
+tbody tr.fila-producto.is-open{background:#f8fafc;}
 
 td{
-    padding:12px;
+    padding:13px 16px;
+    font-size:14px;
+    color:var(--text);
+    border-bottom:1px solid var(--border);
+    vertical-align:middle;
 }
 
-tr:hover{
-    background:#f8fafc;
+td.td-id{
+    font-family:'DM Mono',monospace;
+    font-size:12px;
+    color:var(--hint);
 }
 
-/* DETALLE */
-.detalle-card{
+.product-cell{
     display:flex;
-    gap:30px;
-    background:white;
-    padding:25px;
-    border-radius:15px;
-    box-shadow:0 8px 20px rgba(0,0,0,.08);
-    flex-wrap:wrap;
+    align-items:center;
+    gap:12px;
 }
 
-.detalle-img img{
-    width:180px;
-    border-radius:12px;
+.product-thumb{
+    width:40px;height:40px;
+    border-radius:var(--radius);
+    object-fit:cover;
+    border:1px solid var(--border);
+    background:var(--surface2);
+    flex-shrink:0;
 }
 
-.detalle-info{
-    flex:1;
+.product-name{
+    font-weight:500;
+    font-size:14px;
 }
 
-/* FILAS */
-.fila{
-    display:flex;
-    gap:30px;
-    margin:10px 0;
+.stock-pill{
+    display:inline-block;
+    padding:3px 10px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:500;
+    white-space:nowrap;
 }
 
-.item{
-    flex:1;
+.stock-ok{background:var(--green-bg);color:var(--green-text);}
+.stock-low{background:var(--amber-bg);color:var(--amber-text);}
+.stock-out{background:var(--red-bg);color:var(--red-text);}
+
+.td-price{
+    font-weight:600;
+    font-family:'DM Mono',monospace;
+    font-size:13.5px;
 }
 
-.item label{
+.chevron{
+    display:inline-block;
     font-size:13px;
-    color:#64748b;
+    color:var(--hint);
+    transition:transform .2s ease;
+    user-select:none;
 }
 
-.item span{
-    display:block;
-    font-weight:bold;
-    font-size:16px;
-    margin-top:4px;
+.chevron.open{transform:rotate(90deg);}
+
+/* ── DETALLE ── */
+tr.fila-detalle td{padding:0;}
+
+.detalle-panel{
+    padding:22px 24px;
+    background:#fafbfc;
+    border-bottom:1px solid var(--border);
+    animation:slideDown .18s ease;
 }
 
-.item input,
-.item textarea,
-.item select{
-    width:100%;
-    padding:8px;
-    border-radius:6px;
-    border:1px solid #cbd5e1;
-    box-sizing:border-box;
+@keyframes slideDown{
+    from{opacity:0;transform:translateY(-6px);}
+    to{opacity:1;transform:translateY(0);}
 }
 
-/* ACCIONES */
-.acciones{
+.detalle-inner{
     display:flex;
-    gap:10px;
-    margin-top:15px;
+    gap:24px;
+    align-items:flex-start;
     flex-wrap:wrap;
 }
 
-.edit{
-    background:orange;
-    color:white;
-    border:none;
-    padding:8px 12px;
-    border-radius:6px;
-    cursor:pointer;
+.detalle-img{
+    width:100px;height:100px;
+    border-radius:var(--radius-lg);
+    object-fit:cover;
+    border:1px solid var(--border);
+    background:var(--surface);
+    flex-shrink:0;
 }
 
-.delete{
-    background:red;
-    color:white;
-    border:none;
-    padding:8px 12px;
-    border-radius:6px;
-    cursor:pointer;
+.detalle-body{flex:1;min-width:280px;}
+
+.detalle-nombre{
+    font-size:16px;
+    font-weight:600;
+    color:var(--text);
+    margin-bottom:16px;
+    letter-spacing:-.01em;
 }
 
-.cancel{
-    background:gray;
-    color:white;
-    border:none;
-    padding:8px 12px;
-    border-radius:6px;
-    cursor:pointer;
+.detalle-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+    margin-bottom:16px;
 }
 
-.edit:hover,
-.delete:hover,
-.cancel:hover{
-    transform:scale(1.04);
+.detalle-field label{
+    display:block;
+    font-size:10.5px;
+    font-weight:600;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:5px;
+}
+
+.field-display{
+    font-size:15px;
+    font-weight:600;
+    color:var(--text);
+}
+
+.field-input,
+.field-select,
+.field-textarea{
+    width:100%;
+    padding:7px 10px;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    font-size:14px;
+    font-family:'DM Sans',sans-serif;
+    background:var(--surface);
+    color:var(--text);
+    transition:border-color .15s;
+    outline:none;
+}
+
+.field-input:focus,
+.field-select:focus,
+.field-textarea:focus{
+    border-color:#93c5fd;
+    box-shadow:0 0 0 3px rgba(37,99,235,.08);
+}
+
+.field-textarea{resize:vertical;}
+
+.detalle-desc{margin-bottom:16px;}
+.detalle-desc label{
+    display:block;
+    font-size:10.5px;
+    font-weight:600;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+    color:var(--muted);
+    margin-bottom:5px;
+}
+
+.desc-display{
+    font-size:13.5px;
+    color:var(--muted);
+    line-height:1.6;
+}
+
+.detalle-acciones{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+}
+
+.btn-accion{
+    padding:7px 15px;
+    border-radius:var(--radius);
+    font-size:13px;
+    font-family:'DM Sans',sans-serif;
+    font-weight:500;
+    cursor:pointer;
+    border:1px solid var(--border);
+    background:var(--surface);
+    color:var(--text);
+    transition:all .15s;
+}
+
+.btn-accion:hover{background:var(--surface2);}
+
+.btn-edit{
+    border-color:#fbbf24;
+    background:var(--amber-bg);
+    color:var(--amber-text);
+}
+
+.btn-edit:hover{background:#fef3c7;}
+
+.btn-save{
+    border-color:#6ee7b7;
+    background:var(--green-bg);
+    color:var(--green-text);
+}
+
+.btn-save:hover{background:#dcfce7;}
+
+.btn-delete{
+    border-color:var(--red-border);
+    background:var(--red-bg);
+    color:var(--red-text);
+}
+
+.btn-delete:hover{background:#fee2e2;}
+
+.btn-cancel{
+    border-color:var(--border);
+    background:var(--surface);
+    color:var(--muted);
+}
+
+.btn-cancel:hover{color:var(--text);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+    .sidebar{display:none;}
+    .main{margin-left:0;padding:20px 16px;}
+    .metrics{grid-template-columns:1fr 1fr;}
+    .detalle-grid{grid-template-columns:1fr 1fr;}
 }
 </style>
 </head>
-
 <body>
 
+<!-- ── SIDEBAR ── -->
 <div class="sidebar">
-    <h2>INVENTARIO</h2>
+    <div class="sidebar-brand">
+        <div class="label">Sistema</div>
+        <div class="title">Inventario</div>
+    </div>
+    <nav class="sidebar-nav">
+        <a href="/productos" class="nav-item active">
+            <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 3H8a2 2 0 00-2 2v2h12V5a2 2 0 00-2-2z"/></svg>
+            Catálogo
+        </a>
+    </nav>
 </div>
 
+<!-- ── MAIN ── -->
 <div class="main">
 
-<!-- HEADER -->
-<div class="header">
-    <h2>Catálogo Maestro</h2>
-
-    <a href="/productos/create">
-        <button class="btn">+ Nuevo</button>
-    </a>
-</div>
-
-<!-- FILTROS -->
-<div class="filtros">
-<strong>Categorías:</strong>
-
-<a href="/productos">
-    <button class="btn">Todos</button>
-</a>
-
-@foreach($categorias as $cat)
-<a href="/productos?categoria_id={{ $cat->id }}">
-    <button class="btn">{{ $cat->nombre }}</button>
-</a>
-@endforeach
-</div>
-
-<!-- TARJETAS -->
-<div class="cards">
-    <div class="card blue">
-        Total Productos: {{ $productos->count() }}
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <div class="topbar-left">
+            <h1>Catálogo maestro</h1>
+            <p>Gestiona tus productos, stock y precios</p>
+        </div>
+        <a href="/productos/create" class="btn-primary">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+            Nuevo producto
+        </a>
     </div>
 
-    <div class="card green">
-        Stock Total: {{ $productos->sum('stock') }}
+    <!-- MÉTRICAS -->
+    <div class="metrics">
+        <div class="metric">
+            <div class="metric-label">Total productos</div>
+            <div class="metric-value">{{ $productos->count() }}</div>
+            <span class="badge badge-blue">en catálogo</span>
+        </div>
+        <div class="metric">
+            <div class="metric-label">Stock total</div>
+            <div class="metric-value">{{ number_format($productos->sum('stock')) }}</div>
+            <span class="badge badge-green">unidades</span>
+        </div>
+        <div class="metric">
+            <div class="metric-label">Sin stock</div>
+            <div class="metric-value">{{ $productos->where('stock', 0)->count() }}</div>
+            <span class="badge badge-amber">requieren atención</span>
+        </div>
     </div>
 
-    <div class="card red">
-        Inventario
-    </div>
-</div>
+    <!-- TABLA -->
+    <div class="section">
 
-<!-- TABLA -->
-<div class="table-container">
-<table>
+        <div class="section-header">
+            <span class="section-title">Productos</span>
+            <div class="filters">
+                <a href="/productos" class="filter-btn {{ !request('categoria_id') ? 'active' : '' }}">Todos</a>
+                @foreach($categorias as $cat)
+                <a href="/productos?categoria_id={{ $cat->id }}" class="filter-btn {{ request('categoria_id') == $cat->id ? 'active' : '' }}">
+                    {{ $cat->nombre }}
+                </a>
+                @endforeach
+            </div>
+        </div>
 
-<thead>
-<tr>
-<th>ID</th>
-<th>Imagen</th>
-<th>Producto</th>
-<th>Stock</th>
-<th>Precio</th>
-<th>Ver</th>
-</tr>
-</thead>
+        <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:56px;" class="th-center">#</th>
+                    <th>Producto</th>
+                    <th>Categoría</th>
+                    <th>Stock</th>
+                    <th>Precio</th>
+                    <th style="width:50px;"></th>
+                </tr>
+            </thead>
+            <tbody>
 
-<tbody>
+            @foreach($productos as $producto)
 
-@foreach($productos as $producto)
+            <!-- FILA PRINCIPAL -->
+            <tr class="fila-producto" id="fila-{{ $producto->id }}"
+                onclick="toggleDetalle({{ $producto->id }})">
 
-<!-- FILA PRODUCTO -->
-<tr onclick="toggleDetalle({{ $producto->id }})" style="cursor:pointer;">
-<td>{{ $producto->id }}</td>
+                <td class="td-id td-center">{{ str_pad($producto->id, 3, '0', STR_PAD_LEFT) }}</td>
 
-<td>
-<img src="/imagenes/{{ $producto->imagen ?? 'default.png' }}" width="50">
-</td>
+                <td>
+                    <div class="product-cell">
+                        <img class="product-thumb"
+                             src="/imagenes/{{ $producto->imagen ?? 'default.png' }}"
+                             alt="{{ $producto->nombre }}">
+                        <span class="product-name">{{ $producto->nombre }}</span>
+                    </div>
+                </td>
 
-<td>{{ $producto->nombre }}</td>
+                <td style="color:var(--muted);font-size:13.5px;">
+                    {{ $producto->categoria->nombre ?? 'Sin categoría' }}
+                </td>
 
-<td>{{ $producto->stock }}</td>
+                <td>
+                    @if($producto->stock == 0)
+                        <span class="stock-pill stock-out">Sin stock</span>
+                    @elseif($producto->stock < 10)
+                        <span class="stock-pill stock-low">{{ $producto->stock }} uds</span>
+                    @else
+                        <span class="stock-pill stock-ok">{{ $producto->stock }} uds</span>
+                    @endif
+                </td>
 
-<td>{{ number_format($producto->precio,2) }} Bs</td>
+                <td class="td-price">{{ number_format($producto->precio, 2) }} Bs</td>
 
-<td>👁</td>
-</tr>
+                <td class="td-center">
+                    <span class="chevron" id="chevron-{{ $producto->id }}">›</span>
+                </td>
+            </tr>
 
-<!-- DETALLE -->
-<tr id="detalle-{{ $producto->id }}" style="display:none;">
-<td colspan="6">
+            <!-- FILA DETALLE -->
+            <tr class="fila-detalle" id="detalle-{{ $producto->id }}" style="display:none;">
+                <td colspan="6">
+                    <div class="detalle-panel">
+                        <div class="detalle-inner">
 
-<div class="detalle-card">
+                            <!-- Imagen -->
+                            <img class="detalle-img"
+                                 src="/imagenes/{{ $producto->imagen ?? 'default.png' }}"
+                                 alt="{{ $producto->nombre }}">
 
-<div class="detalle-img">
-    <img src="/imagenes/{{ $producto->imagen ?? 'default.png' }}">
-</div>
+                            <!-- Info -->
+                            <div class="detalle-body">
 
-<div class="detalle-info">
+                                <div class="detalle-nombre">{{ $producto->nombre }}</div>
 
-<h2>{{ $producto->nombre }}</h2>
+                                <form action="/productos/{{ $producto->id }}" method="POST">
+                                @csrf
+                                @method('PUT')
 
-<!-- FORM ACTUALIZAR -->
-<form action="/productos/{{ $producto->id }}" method="POST">
-@csrf
-@method('PUT')
+                                <!-- Campos -->
+                                <div class="detalle-grid">
 
-<div class="fila">
+                                    <div class="detalle-field">
+                                        <label>Stock</label>
+                                        <div class="field-display" id="text-stock-{{ $producto->id }}">
+                                            {{ $producto->stock }} uds
+                                        </div>
+                                        <input class="field-input"
+                                               type="number" name="stock" min="0"
+                                               value="{{ $producto->stock }}"
+                                               id="input-stock-{{ $producto->id }}"
+                                               style="display:none;">
+                                    </div>
 
-<div class="item">
-<label>Stock</label>
+                                    <div class="detalle-field">
+                                        <label>Precio</label>
+                                        <div class="field-display" id="text-precio-{{ $producto->id }}">
+                                            {{ number_format($producto->precio, 2) }} Bs
+                                        </div>
+                                        <input class="field-input"
+                                               type="number" name="precio" min="0" step="0.01"
+                                               value="{{ $producto->precio }}"
+                                               id="input-precio-{{ $producto->id }}"
+                                               style="display:none;">
+                                    </div>
 
-<span id="text-stock-{{ $producto->id }}">
-{{ $producto->stock }}
-</span>
+                                    <div class="detalle-field">
+                                        <label>Categoría</label>
+                                        <div class="field-display" id="text-cat-{{ $producto->id }}">
+                                            {{ $producto->categoria->nombre ?? 'Sin categoría' }}
+                                        </div>
+                                        <select class="field-select"
+                                                name="categoria_id"
+                                                id="input-cat-{{ $producto->id }}"
+                                                style="display:none;">
+                                            @foreach($categorias as $cat)
+                                            <option value="{{ $cat->id }}"
+                                                {{ $producto->categoria_id == $cat->id ? 'selected' : '' }}>
+                                                {{ $cat->nombre }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-<input
-type="number"
-name="stock"
-min="0"
-value="{{ $producto->stock }}"
-id="input-stock-{{ $producto->id }}"
-style="display:none;">
-</div>
+                                </div>
 
-<div class="item">
-<label>Categoría</label>
+                                <!-- Descripción -->
+                                <div class="detalle-desc">
+                                    <label>Descripción</label>
+                                    <div class="desc-display" id="text-desc-{{ $producto->id }}">
+                                        {{ $producto->descripcion ?? '—' }}
+                                    </div>
+                                    <textarea class="field-textarea"
+                                              name="descripcion" rows="3"
+                                              id="input-desc-{{ $producto->id }}"
+                                              style="display:none;">{{ $producto->descripcion }}</textarea>
+                                </div>
 
-<span id="text-cat-{{ $producto->id }}">
-{{ $producto->categoria->nombre ?? 'Sin categoría' }}
-</span>
+                                <!-- Acciones -->
+                                <div class="detalle-acciones">
 
-<select
-name="categoria_id"
-id="input-cat-{{ $producto->id }}"
-style="display:none;">
+                                    <button type="button"
+                                            class="btn-accion btn-edit"
+                                            id="btn-editar-{{ $producto->id }}"
+                                            onclick="activarEdicion({{ $producto->id }})">
+                                        Editar
+                                    </button>
 
-@foreach($categorias as $cat)
-<option value="{{ $cat->id }}"
-{{ $producto->categoria_id == $cat->id ? 'selected' : '' }}>
-{{ $cat->nombre }}
-</option>
-@endforeach
+                                    <button type="submit"
+                                            class="btn-accion btn-save"
+                                            id="btn-guardar-{{ $producto->id }}"
+                                            style="display:none;">
+                                        Guardar cambios
+                                    </button>
 
-</select>
-</div>
+                                    <button type="button"
+                                            class="btn-accion btn-cancel"
+                                            id="btn-cancelar-{{ $producto->id }}"
+                                            style="display:none;"
+                                            onclick="cancelarEdicion({{ $producto->id }})">
+                                        Cancelar
+                                    </button>
 
-</div>
+                                </form>
 
-<div class="fila">
-<div class="item" style="flex:100%;">
+                                <form action="/productos/{{ $producto->id }}" method="POST"
+                                      onsubmit="return confirm('¿Seguro que deseas eliminar este producto?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn-accion btn-delete"
+                                            id="btn-eliminar-{{ $producto->id }}">
+                                        Eliminar
+                                    </button>
+                                </form>
 
-<label>Descripción</label>
+                                    <button type="button"
+                                            class="btn-accion"
+                                            onclick="cerrarDetalle({{ $producto->id }})">
+                                        Cerrar
+                                    </button>
 
-<span id="text-desc-{{ $producto->id }}">
-{{ $producto->descripcion }}
-</span>
+                                </div>
 
-<textarea
-name="descripcion"
-id="input-desc-{{ $producto->id }}"
-style="display:none;">{{ $producto->descripcion }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
 
-</div>
-</div>
+            @endforeach
+            </tbody>
+        </table>
+        </div>
 
-<!-- BOTONES -->
-<div class="acciones">
+    </div><!-- /section -->
 
-<button
-type="button"
-class="edit"
-id="btn-editar-{{ $producto->id }}"
-onclick="activarEdicion({{ $producto->id }})">
-Editar
-</button>
-
-<button
-type="submit"
-class="edit"
-id="btn-guardar-{{ $producto->id }}"
-style="display:none;">
-Actualizar
-</button>
-
-<button
-type="button"
-class="cancel"
-id="btn-cancelar-{{ $producto->id }}"
-style="display:none;"
-onclick="cancelarEdicion({{ $producto->id }})">
-Cancelar
-</button>
-
-</form>
-
-<!-- FORM ELIMINAR -->
-<form
-action="/productos/{{ $producto->id }}"
-method="POST"
-onsubmit="return confirm('¿Eliminar producto?')">
-
-@csrf
-@method('DELETE')
-
-<button
-class="delete"
-id="btn-eliminar-{{ $producto->id }}">
-Eliminar
-</button>
-
-</form>
-
-</div>
-
-</div>
-</div>
-
-</td>
-</tr>
-
-@endforeach
-
-</tbody>
-</table>
-</div>
-
-</div>
+</div><!-- /main -->
 
 <script>
 function toggleDetalle(id){
+    const detalle = document.getElementById('detalle-' + id);
+    const fila    = document.getElementById('fila-' + id);
+    const isOpen  = detalle.style.display !== 'none';
 
-    let fila = document.getElementById('detalle-' + id);
+    // Cerrar todos los demás y restaurar sus filas
+    document.querySelectorAll('.fila-detalle').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.fila-producto').forEach(el => {
+        el.classList.remove('is-open');
+        el.style.display = 'table-row';
+    });
 
-    if(fila.style.display === 'none' || fila.style.display === ''){
-        fila.style.display = 'table-row';
-    }else{
-        fila.style.display = 'none';
+    if(!isOpen){
+        detalle.style.display = 'table-row';
+        fila.style.display = 'none'; // ocultar fila original
+        fila.classList.add('is-open');
     }
 }
 
+function cerrarDetalle(id){
+    document.getElementById('detalle-' + id).style.display = 'none';
+    const fila = document.getElementById('fila-' + id);
+    fila.style.display = 'table-row'; // restaurar fila original
+    fila.classList.remove('is-open');
+    cancelarEdicion(id);
+}
+
 function activarEdicion(id){
-
-    document.getElementById('text-stock-' + id).style.display = 'none';
-    document.getElementById('text-cat-' + id).style.display = 'none';
-    document.getElementById('text-desc-' + id).style.display = 'none';
-
-    document.getElementById('input-stock-' + id).style.display = 'block';
-    document.getElementById('input-cat-' + id).style.display = 'block';
-    document.getElementById('input-desc-' + id).style.display = 'block';
-
-    document.getElementById('btn-editar-' + id).style.display = 'none';
+    ['stock','precio','cat','desc'].forEach(f => {
+        document.getElementById('text-'  + f + '-' + id).style.display = 'none';
+        document.getElementById('input-' + f + '-' + id).style.display = f === 'desc' ? 'block' : 'block';
+    });
+    document.getElementById('btn-editar-'   + id).style.display = 'none';
     document.getElementById('btn-eliminar-' + id).style.display = 'none';
-
-    document.getElementById('btn-guardar-' + id).style.display = 'inline-block';
-    document.getElementById('btn-cancelar-' + id).style.display = 'inline-block';
+    document.getElementById('btn-guardar-'  + id).style.display = 'inline-flex';
+    document.getElementById('btn-cancelar-' + id).style.display = 'inline-flex';
 }
 
 function cancelarEdicion(id){
-
-    document.getElementById('text-stock-' + id).style.display = 'block';
-    document.getElementById('text-cat-' + id).style.display = 'block';
-    document.getElementById('text-desc-' + id).style.display = 'block';
-
-    document.getElementById('input-stock-' + id).style.display = 'none';
-    document.getElementById('input-cat-' + id).style.display = 'none';
-    document.getElementById('input-desc-' + id).style.display = 'none';
-
-    document.getElementById('btn-editar-' + id).style.display = 'inline-block';
-    document.getElementById('btn-eliminar-' + id).style.display = 'inline-block';
-
-    document.getElementById('btn-guardar-' + id).style.display = 'none';
+    ['stock','precio','cat','desc'].forEach(f => {
+        document.getElementById('text-'  + f + '-' + id).style.display = 'block';
+        document.getElementById('input-' + f + '-' + id).style.display = 'none';
+    });
+    document.getElementById('btn-editar-'   + id).style.display = 'inline-flex';
+    document.getElementById('btn-eliminar-' + id).style.display = 'inline-flex';
+    document.getElementById('btn-guardar-'  + id).style.display = 'none';
     document.getElementById('btn-cancelar-' + id).style.display = 'none';
 }
 </script>
